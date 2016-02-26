@@ -2,19 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-<<<<<<< HEAD
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Text;
-using System.Threading.Tasks;
-using APIClient;
-using ConsoleApplication1.Model;
-using Newtonsoft.Json;
-=======
 using System.Net.NetworkInformation;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Xml;
+using APIClient;
+using ConsoleApplication1.Model;
+using Newtonsoft.Json;
 using FunctionalProgramming.Basics;
 using FunctionalProgramming.Monad;
 using FunctionalProgramming.Monad.Parsing;
@@ -24,75 +20,16 @@ using StringParser = FunctionalProgramming.Monad.Transformer.StateEither<Functio
 using CharParser = FunctionalProgramming.Monad.Transformer.StateEither<FunctionalProgramming.Monad.Parsing.ParserState<char>, string, char>;
 using UnitParser = FunctionalProgramming.Monad.Transformer.StateEither<FunctionalProgramming.Monad.Parsing.ParserState<char>, string, FunctionalProgramming.Basics.Unit>;
 using MethodParser = FunctionalProgramming.Monad.Transformer.StateEither<FunctionalProgramming.Monad.Parsing.ParserState<char>, string, ConsoleApplication1.MethodDescriptor>;
->>>>>>> 6c1e4bf114af3134c85b62b577680783c0860707
 
 namespace ConsoleApplication1
 {
     class Program
     {
 
-<<<<<<< HEAD
             private const string URL = "https://api.github.com/repos/RacoWireless/FunctionalProgramming/git/trees/3b1b516d02494c295d46012f14bd2818ad022f2b";
             private static string urlParameters = "?recursive=1";
              private static string urlParameter = "recursive=1";
 
-        static void Main(string[] args)
-        {
-            var client = new RestClient("https://api.github.com");
-            // client.Authenticator = new HttpBasicAuthenticator(username, password);
-
-            var shaRequest =
-                new RestRequest(
-                    "repos/RacoWireless/FunctionalProgramming/commits/master",
-                    Method.GET);
-            IRestResponse shaResponse = client.Execute(shaRequest);
-            var shaContent = JsonConvert.DeserializeObject<Commits>(shaResponse.Content); // raw content as string
-
-
-
-            var treeRequest =
-                new RestRequest(
-                    "repos/RacoWireless/FunctionalProgramming/git/trees/{sha}",
-                    Method.GET);
-            treeRequest.AddUrlSegment("sha", shaContent.sha);
-            treeRequest.AddParameter("recursive", "1"); // adds to POST or URL querystring based on Method
-            // request.AddUrlSegment("id", "123"); // replaces matching token in request.Resource
-
-            // easily add HTTP Headers
-            //request.AddHeader("header", "value");
-
-
-            // execute the request
-            IRestResponse response2 = client.Execute(treeRequest);
-            var content = response2.Content; // raw content as string
-            FileInfo fileInfo = JsonConvert.DeserializeObject<FileInfo>(content);
-            foreach (var file in fileInfo.tree)
-            {
-                if (file.path.EndsWith(".cs"))
-                {
-                    var fileRequest = new RestRequest(
-                       string.Format("repos/RacoWireless/FunctionalProgramming/git/blobs/{0}", file.sha),
-                    Method.GET);
-                    IRestResponse fileResponse = client.Execute(fileRequest);
-                    var fileContent = JsonConvert.DeserializeObject<FileContents>(fileResponse.Content);
-                    var decodedContent = fileContent.content.Base64Decode();
-                    Console.WriteLine(decodedContent.Split(null)[0]);
-                }
-               
-                // raw content as string
-
-            }
-
-            // or automatically deserialize result
-            // return content type is sniffed but can be explicitly set via RestClient.AddHandler();
-            //RestResponse<Person> response2 = client.Execute<Person>(request);
-            // var name = response2.Data.Name;
-
-            // easy async support
-            /* client.ExecuteAsync(request, response => {
-                 Console.WriteLine(response.Content);
-             });*/
-=======
         public static CharParser Comma = Parser.Elem(',');
         public static CharParser Space = Parser.Elem(' ');
         public static CharParser RightParen = Parser.Elem(')');
@@ -139,6 +76,51 @@ namespace ConsoleApplication1
 
         static void Main(string[] args)
         {
+            var client = new RestClient("https://api.github.com");
+            // client.Authenticator = new HttpBasicAuthenticator(username, password);
+
+            var shaRequest =
+                new RestRequest(
+                    "repos/RacoWireless/FunctionalProgramming/commits/master",
+                    Method.GET);
+            IRestResponse shaResponse = client.Execute(shaRequest);
+            var shaContent = JsonConvert.DeserializeObject<Commits>(shaResponse.Content); // raw content as string
+
+
+
+            var treeRequest =
+                new RestRequest(
+                    "repos/RacoWireless/FunctionalProgramming/git/trees/{sha}",
+                    Method.GET);
+            treeRequest.AddUrlSegment("sha", shaContent.sha);
+            treeRequest.AddParameter("recursive", "1"); // adds to POST or URL querystring based on Method
+                                                        // request.AddUrlSegment("id", "123"); // replaces matching token in request.Resource
+
+            // easily add HTTP Headers
+            //request.AddHeader("header", "value");
+
+
+            // execute the request
+            IRestResponse response2 = client.Execute(treeRequest);
+            var content = response2.Content; // raw content as string
+            FileInfo fileInfo = JsonConvert.DeserializeObject<FileInfo>(content);
+            foreach (var file in fileInfo.tree)
+            {
+                if (file.path.EndsWith(".cs"))
+                {
+                    var fileRequest = new RestRequest(
+                       string.Format("repos/RacoWireless/FunctionalProgramming/git/blobs/{0}", file.sha),
+                    Method.GET);
+                    IRestResponse fileResponse = client.Execute(fileRequest);
+                    var fileContent = JsonConvert.DeserializeObject<FileContents>(fileResponse.Content);
+                    var decodedContent = fileContent.content.Base64Decode();
+                    Console.WriteLine(decodedContent.Split(null)[0]);
+                }
+
+                // raw content as string
+
+            }
+
             string sample = @"
 public static void Main(string[] args, string blah)
 {
@@ -159,6 +141,11 @@ public static int Foo()
             Console.WriteLine(Parser.Parse(ParseMethods(), sample));
         }
 
+          
+            // or automatically deserialize result
+            // return content type is sniffed but can be explicitly set via RestClient.AddHandler();
+            //RestResponse<Person> response2 = client.Execute<Person>(request);
+            // var name = response2.Data.Name;
         static StringParser ParseWord(string word)
         {
             return word.Traverse(Parser.Elem).Select(chars => chars.MkString());
@@ -208,7 +195,10 @@ public static int Foo()
                 from next in isEOF ? Parser.Pure<TInput, Unit>(Unit.Only) : Rest<TInput>()
                 select Unit.Only;
 
->>>>>>> 6c1e4bf114af3134c85b62b577680783c0860707
+            // easy async support
+            /* client.ExecuteAsync(request, response => {
+                 Console.WriteLine(response.Content);
+             });*/
         }
     }
 }

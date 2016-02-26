@@ -53,7 +53,7 @@ namespace ConsoleApplication1
                                                   from _2 in Space.MakeOptional()
                                                   select Unit.Only;
 
-        public static MethodParser Method =
+        /*public static MethodParser Method =
             from modifier in AccessModifier
             from isStatic in Static.MakeOptional().Select(m => !m.IsEmpty)
             from _1 in Space
@@ -72,7 +72,7 @@ namespace ConsoleApplication1
                 }),
                 AccessModifier = modifier,
                 ReturnType = @return
-            };
+            };*/
 
         static void Main(string[] args)
         {
@@ -138,7 +138,7 @@ public static int Foo()
     return dude * dude;
 }";
             
-            Console.WriteLine(Parser.Parse(ParseMethods(), sample));
+          //  Console.WriteLine(Parser.Parse(ParseMethods(), sample));
         }
 
           
@@ -161,13 +161,13 @@ public static int Foo()
                 select Tuple.Create(type, name).LiftEnumerable().Concat(rest);
         }
 
-        static StateEither<ParserState<char>, string, IEnumerable<MethodDescriptor>> ParseMethods()
+    /*    static StateEither<ParserState<char>, string, IEnumerable<MethodDescriptor>> ParseMethods()
         {
             //return
             //    from head in Parser.EoF<char>().Select(u => Enumerable.Empty<MethodDescriptor>()).Or(Method.Select(m => m.LiftEnumerable()).Or(NotNewline.CombineTakeLeft(Newline).Select(u => Enumerable.Empty<MethodDescriptor>())))
             //    from rest in ParseMethods()
             //    select head.Concat(rest);
-        }
+        }*/
     }
 
     public class MethodDescriptor

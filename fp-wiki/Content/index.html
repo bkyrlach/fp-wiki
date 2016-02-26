@@ -10,10 +10,41 @@
         <script src="js/App.js"></script>
         <script src="js/SearchController.js"></script>
     </head>
-    <body ng-controller="SearchController">
-        <form class="pure-form">
+<body ng-controller="SearchController">
+<br/>
+<br/>
+    <div style="display: inline-block; text-align: center">
+        <form class="pure-form" style="display: inline-block; text-align: center">
             <input type="text" ng-model="query" />
             <button class="pure-button pure-button-primary" ng-click="search()">Search</button>
         </form>
-    </body>
+    </div>
+<br/>
+<br/>
+<br/>
+<table class="pure-table pure-table-striped pure-table-bordered">
+    <tbody>
+    <thead>
+    <tr>
+        <th>Method Name</th>
+        <th>Method Parameters</th>
+        <th>Method ReturnType</th>
+    </tr>
+    </thead>
+    <tr ng-repeat="method in methods">
+        <td ng-click="goToDetails(method)">{{method.Name}}</td>
+        <td>{{method.Parameters}}</td>
+        <td>{{method.ReturnType}}</td>
+    </tr>
+    </tbody>
+</table>
+<br/>
+    <br/>
+    <div ng-show="details">
+        <label> name: {{details.Name}}}</label><br/>
+        <label> parameters: {{details.Parameters}}</label><br/>
+        <label> returntype: {{details.ReturnType}}</label>
+        <button ng-click="resetDetails()">Close</button>
+    </div>
+</body>
 </html>
