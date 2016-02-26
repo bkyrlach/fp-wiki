@@ -41,11 +41,11 @@
         bare: true,
         force: true
       },
-      shared: {
+      solution: {
         expand: true,
-        cwd: 'fp-wiki/Content/js',
+        cwd: 'Coffee',
         src: '**/*.coffee',
-        dest: 'fp-wiki/content/scripts/compiled/',
+        dest: 'Content/js',
         ext: '.js'
       }
     },
@@ -56,7 +56,7 @@
       options: {
         configFile: 'coffeelint.json'
       },
-      solution: ['fp-wiki/content/scripts/**/*.coffee'],
+      solution: ['fp-wiki/content/**/*.coffee'],
     },
 
     /* configuration for re-compiling coffeescript/less files after they have been modified */
@@ -71,6 +71,14 @@
       }
     }
   });
+
+    /* load node package manager tasks */
+  grunt.loadNpmTasks('grunt-bower');
+  grunt.loadNpmTasks('grunt-coffeelint');
+  grunt.loadNpmTasks('grunt-contrib-clean');
+  grunt.loadNpmTasks('grunt-contrib-coffee');
+  grunt.loadNpmTasks('grunt-contrib-watch');
+  grunt.loadNpmTasks('grunt-include-source');
 
     
   grunt.registerTask('compile-coffee', ['coffee', 'bower']);
