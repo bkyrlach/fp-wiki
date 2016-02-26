@@ -5,7 +5,7 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "fp-wiki", "fp-wiki\fp-wiki.csproj", "{BC45CE36-9191-4376-A00D-D89BCF06736A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "source-downloader", "ConsoleApplication1\source-downloader.csproj", "{D71992B9-EFA5-4737-8DE6-2F5B658451A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "source-downloader", "source-downloader\source-downloader.csproj", "{D71992B9-EFA5-4737-8DE6-2F5B658451A8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
