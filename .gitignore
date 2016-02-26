@@ -4,3 +4,4 @@ obj/
 *.DotSettings
 /packages/*
 .vs/*
+fp-wiki/node_modules/*
