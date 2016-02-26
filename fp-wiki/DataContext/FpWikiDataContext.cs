@@ -64,6 +64,7 @@ namespace fp_wiki.DataContext
         public int Id { get; set; }
         public string Name { get; set; }
         public string ReturnType { get; set; }
+        public HelpContent HelpContent { get; set; }
         public virtual ICollection<ParameterDescriptor> Parameters { get; set; } 
     }
     [Table("Parameter")]
@@ -74,5 +75,12 @@ namespace fp_wiki.DataContext
         public string Name { get; set; }
         public MethodDescriptor Method { get; set; }
         public int ParameterOrder { get; set; }
+    }
+
+    public class HelpContent
+    {
+        public int Id { get; set; }
+        public MethodDescriptor Method { get; set; } 
+
     }
 }
