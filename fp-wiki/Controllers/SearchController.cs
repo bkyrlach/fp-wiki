@@ -4,11 +4,11 @@ using System.Linq;
 using System.Web;
 using System.Web.Http;
 
-namespace fp_wiki.Api
+namespace fp_wiki.Controllers
 {
-    public class SearchApi : ApiController
+    public class SearchController : ApiController
     {
-        public List<string> Get(Search search)
+        public List<string> Get(string search)
         {
             Console.WriteLine(search);
             return new List<string>
