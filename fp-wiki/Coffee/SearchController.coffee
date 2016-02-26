@@ -4,9 +4,10 @@ Site.controller 'SearchController', ['$scope', 'SearchApi', ($scope, searchApi) 
   $scope.greeting = 'Hello, world'
   $scope.query = ''
   $scope.methods = null
+  $scope.details = null
   $scope.search = () -> 
     $scope.methods = null
-    searchApi.get { query: $scope.query } , 
+    searchApi.get { search: $scope.query } , 
       (result) -> 
         $scope.methods = result
         console.log($scope.methods)
@@ -15,5 +16,8 @@ Site.controller 'SearchController', ['$scope', 'SearchApi', ($scope, searchApi) 
     searchApi.get {id: method.Id} ,
       (result) ->
         $scope.details = result
+
+  $scope.resetDetails = () ->
+    $scope.details = null
   true
 ]
