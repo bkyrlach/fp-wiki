@@ -121,22 +121,22 @@ namespace ConsoleApplication1
 
             }
 
-            string sample = @"
-public static void Main(string[] args, string blah)
-{
-    Console.writeLine(""Hello World"");
-}
+            /*            string sample = @"
+            public static void Main(string[] args, string blah)
+            {
+                Console.writeLine(""Hello World"");
+            }
 
-//check out my dope comment
-/* 
-    this is an example
-    of a multiline comment yo
-*/
-public static int Foo()
-{
-    var dude = 3;
-    return dude * dude;
-}";
+            //check out my dope comment
+            /* 
+                this is an example
+                of a multiline comment yo
+            #1#
+            public static int Foo()
+            {
+                var dude = 3;
+                return dude * dude;
+            }";*/
             
           //  Console.WriteLine(Parser.Parse(ParseMethods(), sample));
         }
