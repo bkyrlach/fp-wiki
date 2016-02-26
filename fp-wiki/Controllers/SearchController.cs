@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -10,11 +11,11 @@ namespace fp_wiki.Controllers
 {
     public class SearchController : ApiController
     {
-        private FpWikiDataContext _dataContext = new FpWikiDataContext();
+        private readonly FpWikiDataContext _dataContext = new FpWikiDataContext();
 
         public IHttpActionResult Get(Search search)
         {
-            return Ok(_dataContext.Set<MethodDescriptor>().ToList());
+            return Ok(_dataContext.Set<MethodDescriptor>().Include(md => md.Parameters).Include(md => md.HelpContent).ToList());
         }
 
         public IHttpActionResult GetById(int id)
@@ -51,7 +52,7 @@ namespace fp_wiki.Controllers
                 results.Add(innerResults);
             }
 
-            return null;
+            return results;
         }
     }
 
