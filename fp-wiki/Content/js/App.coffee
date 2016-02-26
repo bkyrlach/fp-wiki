@@ -1,4 +1,3 @@
 ﻿# CoffeeScript
 
-angular.module('fp-wiki')
-  .controller('SearchController', searchController)
+Site = angular.module 'fp-wiki', []

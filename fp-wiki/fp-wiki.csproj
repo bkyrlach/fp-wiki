@@ -82,6 +82,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\index.html" />
+    <Content Include="Content\js\App.js" />
+    <Content Include="Content\js\SearchController.js" />
     <Content Include="Global.asax" />
     <Content Include="Web.config" />
   </ItemGroup>
