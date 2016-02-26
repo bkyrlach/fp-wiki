@@ -5,4 +5,4 @@ obj/
 /packages/*
 .vs/*
 fp-wiki/node_modules/*
-fp-wiki/content/scripts/compiled/*
+fp-wiki/Content/*.js
