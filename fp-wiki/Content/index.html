@@ -38,11 +38,12 @@
     </tr>
     </tbody>
 </table>
+<br/>
+    <br/>
     <div ng-show="details">
-        <label>
-            {{details}}
-
-        </label>
+        <label> name: {{details.Name}}}</label><br/>
+        <label> parameters: {{details.Parameters}}</label><br/>
+        <label> returntype: {{details.ReturnType}}</label>
         <button ng-click="resetDetails()">Close</button>
     </div>
 </body>

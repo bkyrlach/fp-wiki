@@ -65,7 +65,7 @@ namespace fp_wiki.DataContext
         public string Name { get; set; }
         public string ReturnType { get; set; }
         public HelpContent HelpContent { get; set; }
-        public virtual ICollection<ParameterDescriptor> Parameters { get; set; } 
+        public ICollection<ParameterDescriptor> Parameters { get; set; } 
     }
     [Table("Parameter")]
     public class ParameterDescriptor
