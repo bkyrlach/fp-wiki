@@ -56,6 +56,10 @@ namespace fp_wiki.DataContext
             modelBuilder.Entity<MethodDescriptor>()
                 .HasMany(md => md.Parameters)
                 .WithRequired(p => p.Method);
+
+            modelBuilder.Entity<MethodDescriptor>()
+                .HasRequired(md => md.HelpContent)
+                .WithRequiredPrincipal(hc => hc.Method);
         }
     }
     [Table("Method")]
