@@ -1,0 +1,30 @@
+{
+  "name": "fp-wiki",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [ ],
+  "author": "tlove",
+  "license": "ISC",
+  "devDependencies": {
+    "bower": "latest",
+    "coffeelint": "^1.12.1", 
+    "grunt": "latest",
+    "grunt-bower": "latest",
+    "grunt-bower-concat": "latest",
+    "grunt-coffeelint": "latest",
+    "grunt-contrib-clean": "latest",
+    "grunt-contrib-coffee": "latest",
+    "grunt-contrib-concat": "latest",
+    "grunt-contrib-copy": "latest",
+    "grunt-contrib-cssmin": "latest",
+    "grunt-contrib-less": "latest",
+    "grunt-contrib-uglify": "latest",
+    "grunt-contrib-watch": "latest",
+    "grunt-include-source": "latest",
+    "grunt-protractor-runner": "latest"
+  }
+}

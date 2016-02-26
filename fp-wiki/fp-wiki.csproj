@@ -85,6 +85,7 @@
     <Content Include="Content\js\App.js" />
     <Content Include="Content\js\SearchController.js" />
     <Content Include="Global.asax" />
+    <Content Include="Gruntfile.js" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +100,7 @@
     <Content Include="packages.config" />
     <Content Include="Content\js\SearchController.coffee" />
     <Content Include="Content\js\App.coffee" />
+    <Content Include="package.json" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
