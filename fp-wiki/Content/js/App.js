@@ -4,7 +4,12 @@ var Site;
 Site = angular.module('fp-wiki', ['ngResource']);
 
 Site.factory('SearchApi', [
-  '$resource', function($resource) {
-    return $resource('api/Search/');
-  }
+  '$resource', (function($resource) {
+    return $resource('/api/Search/', {}, {
+      'get': {
+        method: 'GET',
+        isArray: true
+      }
+    });
+  })
 ]);
