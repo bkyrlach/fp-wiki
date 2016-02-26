@@ -1,23 +1,78 @@
 ﻿module.exports = function (grunt) {
 
-  // Project configuration.
+  /* grunt initialize configuration */
   grunt.initConfig({
+    /* where your package manager lives */
     pkg: grunt.file.readJSON('package.json'),
-    uglify: {
+
+    /* configuration for bower to include bower installed js libraries */
+    /* grunt bower */
+    bower: {
+      solution: {
+        dest: 'fp-wiki/content/vendor/',
+        css_dest: 'fp-wiki/content/vendor/css/',
+          fonts_dest: 'Audi.Bridge.Webfp-wiki/content/vendor/fonts/',
+          js_dest: 'fp-wiki/content/vendor/scripts/',
+        options: {
+          keepExpandedHierarchy: false,
+          packageSpecific: {
+            'bootstrap': {
+              files: ['dist/css/bootstrap.css', 'dist/fonts/*', 'dist/js/bootstrap.js']
+            },
+            'codemirror': {
+              files: ['lib/codemirror.js', 'lib/codemirror.css', 'addon/edit/matchbrackets.js', 'mode/css/css.js', 'mode/htmlmixed/htmlmixed.js', 'mode/javascript/javascript.js', 'mode/xml/xml.js']
+            }
+          }
+        }
+      }
+    },
+
+    /* configuration for cleaning up grunt created files */
+    /* grunt clean */
+    clean: {
+      solution: ['**/content/*.css', '**/content/scripts', '**/content/templates', '**/content/vendor', '**/content/scripts/compile/*.coffee']
+    },
+
+    /* configuration for compiling coffeescript files */
+    /* grunt coffee */
+    coffee: {
       options: {
-        banner: '/*! <%= pkg.name %> <%= grunt.template.today("yyyy-mm-dd") %> */\n'
+        sourceMap: false,
+        bare: true,
+        force: true
       },
-      build: {
-        src: 'src/<%= pkg.name %>.js',
-        dest: 'build/<%= pkg.name %>.min.js'
+      shared: {
+        expand: true,
+        cwd: 'fp-wiki/Content/js',
+        src: '**/*.coffee',
+        dest: 'fp-wiki/content/scripts/compiled/',
+        ext: '.js'
+      }
+    },
+
+    /* configuration for coffeelint */
+    /* grunt coffeelint */
+    coffeelint: {
+      options: {
+        configFile: 'coffeelint.json'
+      },
+      solution: ['fp-wiki/content/scripts/**/*.coffee'],
+    },
+
+    /* configuration for re-compiling coffeescript/less files after they have been modified */
+    /* grunt watch */
+    watch: {
+      scripts: {
+        files: '**/*.coffee',
+        tasks: ['coffee'],
+        options: {
+          spawn: false
+        }
       }
     }
   });
 
-  // Load the plugin that provides the "uglify" task.
-  grunt.loadNpmTasks('grunt-contrib-uglify');
-
-  // Default task(s).
-  grunt.registerTask('default', ['uglify']);
+    
+  grunt.registerTask('compile-coffee', ['coffee', 'bower']);
 
 };
