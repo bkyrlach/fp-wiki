@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Web;
 using System.Web.Http;
 
@@ -18,7 +19,37 @@ namespace fp_wiki.Controllers
                 "Baz",
                 "FooBar"
             };
-        } 
+        }
+
+        private static bool IsNameSearch(string query)
+        {
+            return query.Split(' ').Count() == 1;
+        }
+
+        private static Regex _list = new Regex("\\[([^[])+\\]");
+
+        private static List<List<string>> MapHaskellToCSharp(string query)
+        {
+            var results = new List<List<string>>();
+            var queryParts = query.Split(' ');
+            foreach (var queryPart in queryParts)
+            {
+                var innerResults = new List<string>();
+                if (_list.IsMatch(queryPart))
+                {                    
+                    innerResults.Add("IEnumerable");
+                    innerResults.Add("IQueryable");
+                    innerResults.Add("IConsList");
+                    innerResults.Add("List");
+                    innerResults.Add("IList");
+                }
+                else if (queryPart == "Int")
+                {
+                    innerResults.Add("int");
+                }
+                results.Add(innerResults);
+            }
+        }
     }
 
     public class Search
