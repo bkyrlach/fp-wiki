@@ -8,7 +8,7 @@ namespace fp_wiki.Controllers
 {
     public class SearchController : ApiController
     {
-        public List<string> Get(string search)
+        public List<string> Get(Search search)
         {
             Console.WriteLine(search);
             return new List<string>
