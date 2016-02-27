@@ -1,26 +1,51 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Odbc;
 using System.Linq;
 using System.Text.RegularExpressions;
-using System.Web;
 using System.Web.Http;
-using fp_wiki.DataContext;
+using Anorm.Net;
+using fp_wiki.Models;
+using FunctionalProgramming.Basics;
+using FunctionalProgramming.Monad;
+using FunctionalProgramming.Streaming;
 
 namespace fp_wiki.Controllers
 {
-    public class SearchController : ApiController
+    public class SearchResult
     {
-        private readonly FpWikiDataContext _dataContext = new FpWikiDataContext();
+        public int HelpId { get; set; }
+        public string HelpBlurb { get; set; }
+        public string MethodName { get; set; }
+        public string TypeSignature { get; set; }
+    }
 
-        public IHttpActionResult Get(Search search)
+    public class SearchController : ApiController
+    {        
+        public IEnumerable<SearchResult> Get(Search search)
         {
-            return Ok(_dataContext.Set<MethodDescriptor>().Include(md => md.Parameters).Include(md => md.HelpContent).ToList());
-        }
+            var methodMapper =
+                from id in Mapper.Int("Id")
+                from name in Mapper.Str("Name")
+                from blurb in Mapper.Str("Blurb")
+                select new SearchResult
+                {
+                    HelpId = id,
+                    MethodName = name,
+                    HelpBlurb = blurb
+                };
 
-        public IHttpActionResult GetById(int id)
-        {
-            return Ok(_dataContext.Set<MethodDescriptor>().Where(md => md.Id == id));
+            var queryText = @"SELECT hc.Id as Id, m.Name as Name, hc.Blurb as Blurb
+FROM HelpContent hc
+INNER JOIN Method m on hc.MethodId = m.Id";
+
+            var query = new Query(queryText);
+            var results = Process.Resource(
+                create: () => new OdbcConnection("Driver={SQL Server};Server=APNSQL-DEV;Database=fp_wiki;Trusted_Connection=Yes;"),
+                initialize: conn => conn.Open(),
+                release: conn => conn.Dispose(),
+                use: conn => Database.ExecuteQuery(query, methodMapper, conn)).RunLog().KeepRights();
+
+            return results;
         }
 
         private static bool IsNameSearch(string query)

@@ -1,49 +1,61 @@
 ﻿<!DOCTYPE html>
 <html ng-app="fp-wiki">
     <head>
-        <title></title>
+        <title>FP Search</title>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+        <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css"/>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/styles/default.min.css">
+        <link rel="stylesheet" href="css/app.css"/>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.0/angular.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-resource.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.5.1/lodash.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.0/angular-sanitize.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/showdown/1.3.0/showdown.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/ng-showdown/1.1.0/ng-showdown.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.2.0/highlight.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-highlightjs/0.5.1/angular-highlightjs.js"></script>
         <script src="js/App.js"></script>
         <script src="js/SearchController.js"></script>
     </head>
-<body ng-controller="SearchController">
-<br/>
-<br/>
-    <div style="display: inline-block; text-align: center">
-        <form class="pure-form" style="display: inline-block; text-align: center">
-            <input type="text" ng-model="query" />
-            <button class="pure-button pure-button-primary" ng-click="search()">Search</button>
-        </form>
-    </div>
-<br/>
-<br/>
-<br/>
-<table class="pure-table pure-table-striped pure-table-bordered">
-    <tbody>
-    <thead>
-    <tr>
-        <th>Method Name</th>
-        <th>Method Parameters</th>
-        <th>Method ReturnType</th>
-    </tr>
-    </thead>
-    <tr ng-repeat="method in methods">
-        <td ng-click="goToDetails(method)">{{method.Name}}</td>
-        <td>{{method.Parameters}}</td>
-        <td>{{method.ReturnType}}</td>
-    </tr>
-    </tbody>
-</table>
-    <div ng-show="details">
-        <label>
-            {{details}}
-
-        </label>
-        <button ng-click="resetDetails()">Close</button>
-    </div>
-</body>
+    <body ng-controller="SearchController">
+        <div class="pure-g">
+            <div class="pure-u-1-5"></div>
+            <div class="pure-u-3-5">                
+                <div class="pure-g">
+                    <div class="pure-u-1-3"></div>
+                    <div class="pure-u-1-3" style="padding-top: 10px">
+                        <form class="pure-form">
+                            <input type="text" ng-model="query" />
+                            <button class="pure-button pure-button-primary" ng-click="search()">Search</button>
+                        </form>
+                    </div>
+                    <div class="pure-u-1-3"></div>
+                </div>
+                <table class="pure-table pure-table-striped pure-table-bordered" ng-show="results && !details">
+                    <thead>
+                        <tr>
+                            <th>Method Name</th>
+                            <th>Help Blurb</th>
+                        </tr>
+                    </thead>        
+                    <tbody>
+                        <tr ng-repeat="result in results" ng-click="goToDetails(result.helpId)">
+                            <td>{{result.methodName}}</td>
+                            <td markdown-to-html="result.helpBlurb"></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div ng-show="details">
+                    <div style="padding-top: 10px">{{details.methodName}}</div>
+                    <div style="padding-top: 10px" ng-show="!editMode" ng-click="edit()" markdown-to-html="details.blurb"></div>
+                    <div style="padding-top: 10px" ng-show="!editMode" ng-click="edit()" markdown-to-html="details.content"></div>
+                    <textarea ng-show="editMode" ng-model="details.blurb"></textarea>
+                    <textarea ng-show="editMode" ng-model="details.content"></textarea>
+                    <button ng-show="editMode" ng-click="done()">Save</button>
+                    <button ng-show="!editMode" ng-click="resetDetails()">Close</button>
+                </div>                
+            </div>
+            <div class="pure-u-1-5"></div>
+        </div>
+    </body>
 </html>
