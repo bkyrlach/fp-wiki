@@ -32,7 +32,7 @@ namespace fp_wiki.Controllers
                     Blurb = blurb,
                     Content = content
                 };
-            var query = new Query("SELECT hc.Id as Id, m.Name as Name, hc.Blurb as Blurb, hc.HelpContent as HelpContent FROM HelpContent hc INNER JOIN Method m ON m.Id = hc.MethodId WHERE hc.Id = {id}").On("id", new IntValue(id));
+            var query = new Query("SELECT hc.Id as Id, m.Name as Name, hc.Blurb as Blurb, hc.HelpContent as HelpContent FROM HelpContent hc INNER JOIN Method m ON m.Id = hc.MethodId WHERE hc.Id = {id}").On("id", id);
             return Process.Resource(
                 create: () => new OdbcConnection("Driver={SQL Server};Server=APNSQL-DEV;Database=fp_wiki;Trusted_Connection=Yes;"),
                 initialize: conn => conn.Open(),
@@ -44,12 +44,15 @@ namespace fp_wiki.Controllers
 
         public void Post(HelpContentHolder updatedContent)
         {
-            var conn = new OdbcConnection("Driver={SQL Server};Server=APNSQL-DEV;Database=fp_wiki;Trusted_Connection=Yes;");
             var statement = new Query("UPDATE HelpContent SET Blurb = {blurb}, HelpContent = {content} WHERE Id = {id}")
-                .On("id", new IntValue(updatedContent.Id))
-                .On("blurb", new StringValue(updatedContent.Blurb))
-                .On("content", new StringValue(updatedContent.HelpContent));
-            var result = Database.ExecuteStatement(conn, statement).UnsafePerformIo();
+                .On("id", updatedContent.Id)
+                .On("blurb", updatedContent.Blurb)
+                .On("content", updatedContent.HelpContent);
+            var result = Process.Resource(
+                create: () => new OdbcConnection("Driver={SQL Server};Server=APNSQL-DEV;Database=fp_wiki;Trusted_Connection=Yes;"),
+                initialize: conn => conn.Open(),
+                release: conn => conn.Dispose(),
+                use: conn => Database.ExecuteStatement(conn, statement)).Run();
             Console.WriteLine(result);
         }
     }

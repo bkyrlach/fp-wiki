@@ -15,30 +15,52 @@ namespace fp_wiki.Controllers
     {
         public int HelpId { get; set; }
         public string HelpBlurb { get; set; }
+        public string DeclaringType { get; set; }
         public string MethodName { get; set; }
-        public string TypeSignature { get; set; }
+        public string MethodSignature { get; set; }
+
     }
 
     public class SearchController : ApiController
     {        
-        public IEnumerable<SearchResult> Get(Search search)
+        public IEnumerable<SearchResult> Get(string search)
         {
+            if (search == null || string.IsNullOrWhiteSpace(search))
+            {
+                return Enumerable.Empty<SearchResult>();
+            }
             var methodMapper =
                 from id in Mapper.Int("Id")
                 from name in Mapper.Str("Name")
                 from blurb in Mapper.Str("Blurb")
+                from declaring in Mapper.Str("DeclaringType")
+                from methodSignature in Mapper.Str("MethodSignature")
                 select new SearchResult
                 {
                     HelpId = id,
                     MethodName = name,
-                    HelpBlurb = blurb
+                    HelpBlurb = blurb,
+                    DeclaringType = declaring,
+                    MethodSignature = methodSignature
                 };
 
-            var queryText = @"SELECT hc.Id as Id, m.Name as Name, hc.Blurb as Blurb
-FROM HelpContent hc
-INNER JOIN Method m on hc.MethodId = m.Id";
+            var queryText = @"
+SELECT 
+    hc.Id as Id, 
+    m.Name as Name, 
+    hc.Blurb as Blurb,
+    m.DeclaringType as DeclaringType,
+    m.Declaration as MethodSignature
+FROM 
+    HelpContent hc 
+    INNER JOIN Method m 
+        ON hc.MethodId = m.Id
+WHERE
+    m.Name LIKE {searchString}
+    OR m.DeclaringType LIKE {searchString}
+";
 
-            var query = new Query(queryText);
+            var query = new Query(queryText).On("searchString", $"%{search}");
             var results = Process.Resource(
                 create: () => new OdbcConnection("Driver={SQL Server};Server=APNSQL-DEV;Database=fp_wiki;Trusted_Connection=Yes;"),
                 initialize: conn => conn.Open(),
@@ -48,46 +70,5 @@ INNER JOIN Method m on hc.MethodId = m.Id";
             return results;
         }
 
-        private static bool IsNameSearch(string query)
-        {
-            return query.Split(' ').Count() == 1;
-        }
-
-        private static Regex _list = new Regex("\\[([^[])+\\]");
-
-        private static List<List<string>> MapHaskellToCSharp(string query)
-        {
-            var results = new List<List<string>>();
-            var queryParts = query.Split(' ');
-            foreach (var queryPart in queryParts)
-            {
-                var innerResults = new List<string>();
-                if (_list.IsMatch(queryPart))
-                {                    
-                    innerResults.Add("IEnumerable");
-                    innerResults.Add("IQueryable");
-                    innerResults.Add("IConsList");
-                    innerResults.Add("List");
-                    innerResults.Add("IList");
-                }
-                else if (queryPart == "Int")
-                {
-                    innerResults.Add("int");
-                }
-                results.Add(innerResults);
-            }
-
-            return results;
-        }
-    }
-
-    public class Search
-    {
-        public string Query { get; set; }
-
-        public override string ToString()
-        {
-            return $"Search({Query})";
-        }
     }
 }

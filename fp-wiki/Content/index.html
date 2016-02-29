@@ -34,13 +34,15 @@
                 <table class="pure-table pure-table-striped pure-table-bordered" ng-show="results && !details">
                     <thead>
                         <tr>
-                            <th>Method Name</th>
+                            <th>Name</th>
+                            <th>Signature</th>
                             <th>Help Blurb</th>
                         </tr>
                     </thead>        
                     <tbody>
                         <tr ng-repeat="result in results" ng-click="goToDetails(result.helpId)">
-                            <td>{{result.methodName}}</td>
+                            <td>{{result.declaringType}}.{{result.methodName}}</td>
+                            <td>{{result.methodSignature}}</td>
                             <td markdown-to-html="result.helpBlurb"></td>
                         </tr>
                     </tbody>
@@ -49,8 +51,8 @@
                     <div style="padding-top: 10px">{{details.methodName}}</div>
                     <div style="padding-top: 10px" ng-show="!editMode" ng-click="edit()" markdown-to-html="details.blurb"></div>
                     <div style="padding-top: 10px" ng-show="!editMode" ng-click="edit()" markdown-to-html="details.content"></div>
-                    <textarea ng-show="editMode" ng-model="details.blurb"></textarea>
-                    <textarea ng-show="editMode" ng-model="details.content"></textarea>
+                    <textarea ng-show="editMode" ng-model="details.blurb" rows="20" cols="80"></textarea>
+                    <textarea ng-show="editMode" ng-model="details.content" rows="100" cols="80"></textarea>
                     <button ng-show="editMode" ng-click="done()">Save</button>
                     <button ng-show="!editMode" ng-click="resetDetails()">Close</button>
                 </div>                
